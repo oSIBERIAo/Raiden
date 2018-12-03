@@ -19,19 +19,14 @@ class Game extends GameScene {
         })
         this.init()
     }
-    imageFromGame(name) {
+    textureByName(name) {
         var g = this
         var img = g.images[name]
-        var image = {
-            w: img.width,
-            h: img.height,
-            image: img,
-        }
-        return image
+        return img
     }
     drawImage(guaImage) {
         var g = this
-        g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
+        g.context.drawImage(guaImage.texture, guaImage.x, guaImage.y)
     }
     registerAction(key, callback) {
         var g = this

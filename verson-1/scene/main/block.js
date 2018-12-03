@@ -1,5 +1,7 @@
 var Block = function (game, position) {
-    var o = game.imageFromGame("block")
+    // var o = game.imageFromGame("block")
+
+    var o = GameImage.new(game, "block")
     var p = position
 
     o.x = p[0]

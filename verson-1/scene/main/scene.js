@@ -3,43 +3,10 @@ class Scene extends GameScene {
         super(game)
         this.enableDebugMode = true
         this.score = 0
-        this.paddle = Paddle(game)
-        this.ball = Ball(game)
 
-        this.levelN = 2
-        this.blocks = loadlevel(game, this.levelN)
+        
+        this.setup()
 
-        this.game.registerAction("a", () => {
-            this.paddle.moveLeft()
-        })
-        this.game.registerAction("d", () => {
-            this.paddle.moveRight(this.game.canvas.width)
-        })
-        this.game.registerAction("f", () => {
-            this.ball.fire()
-        })
-
-        this.enableDragBall = false
-        this.game.canvas.addEventListener("mousedown", (e) => {
-            let point = {
-                x: e.layerX,
-                y: e.layerY,
-            }
-            this.enableDragBall = this.ball.judgeRect(this.ball, point)
-        })
-        this.game.canvas.addEventListener("mousemove", (e) => {
-            let point = {
-                x: e.layerX,
-                y: e.layerY,
-            }
-            if (this.enableDragBall) {
-                this.ball.x = point.x
-                this.ball.y = point.y
-            }
-        })
-        this.game.canvas.addEventListener("mouseup", (e) => {
-            this.enableDragBall = false
-        })
         var debugMode = () => {
             window.addEventListener("keydown", (e) => {
                 if (e.key == "o") {
@@ -67,7 +34,7 @@ class Scene extends GameScene {
                         this.blocks = loadlevel(game, this.levelN)
                     }
                 }
-                
+
             })
             document.querySelector('#id_fps').addEventListener("input", function (e) {
                 window.fps = e.target.value
@@ -75,157 +42,99 @@ class Scene extends GameScene {
         }
         debugMode()
     }
+    setup() {
+        var game = this.game
+        this.player = Player.new(game)
 
+        this.bg = BackGround.new(game)
+        this.bg2 = BackGround.new(game)
+        this.bg2.y = -this.game.canvas.clientHeight
+
+        this.score = 0
+        this.lable = GameLable.new(game, this.score)
+
+        this.addElement(this.bg, this.bg2, this.player, this.lable)
+
+        this.numberEnemy = 12
+        this.addEnemeies()
+        this.game.registerAction("f", () => {
+            this.player.fire()
+        })
+
+        
+       
+    }
+    addEnemeies() {
+        // var es = []
+        for (let i = 0; i < this.numberEnemy; i++) {
+            let enemy = Enemy.new(this.game)
+            // es.push(enemy)
+            this.addElement(enemy)
+        }
+        // this.enemies = es
+    }
+     //碰撞检测标记
+    removeCheck(a, b) {
+        for (let i = 0; i < this.elements.length; i++) {
+            if (this.elements[i] instanceof a) {
+                for (let x = 0; x < this.elements.length; x++) {
+                    if (this.elements[x] instanceof b) {
+                        let a = this.elements[i]
+                        let b = this.elements[x]
+                        let result = rectIntersects(a, b) || rectIntersects(b, a)
+                        if (result) {
+                             //标记去除并添加爆炸效果
+                            a.status = false
+                            b.status = false
+                            if (a instanceof Enemy || b instanceof Enemy ) {
+                                this.score += 100
+                                var ParticleSystem = GameParticleSystem.new(this.game, b)
+                                this.addElement(ParticleSystem)
+                            }
+                            
+                            this.numberEnemy--
+                        }
+                    }
+                }
+            }
+        }
+    }
+    remove() {
+        let statusCheck = function (elements) {
+            return elements.status != false
+        }
+        this.elements = this.elements.filter(statusCheck)
+    }
+    updateEnemy() {
+        this.numberEnemy = 0
+        for (let i = 0; i < this.elements.length; i++) {
+            if (this.elements[i] instanceof Enemy) {
+                this.numberEnemy++
+            }
+        }
+        if (this.numberEnemy < config.enemy_number) {
+            let enemy = Enemy.new(this.game)
+            this.addElement(enemy)
+            this.numberEnemy++
+        }
+    }
 
     update() {
+        super.update()
         var game = this.game
         if (game.paused) { return }
 
-        this.ball.move(game.canvas)
-        if (this.ball.y > this.paddle.y) {
-            var end = new SceneEnd(game)
-            game.replceScene(end)
-        }
-        if (this.paddle.collide(this.ball)) {
-            this.ball.bounce(this.paddle)
-        }
-        for (let i = 0; i < this.blocks.length; i++) {
-            let block = this.blocks[i]
-            if (block.collide(this.ball)) {
-                block.kill()
-                this.ball.bounce(block)
-                this.score += 100
-            }
-        }
-    }
+        //碰撞检测标记
+        this.removeCheck(Enemy, Bullet)
+        this.removeCheck(Enemy, Player)
+        this.removeCheck(EnemyBullet, Player)
+        this.removeCheck(EnemyBullet, Bullet)
 
-    draw() {
-        var game = this.game
-        game.context.fillStyle = "#646464"
-        game.context.fillRect(0, 0, 400, 300)
-        game.context.fillStyle = "#fff"
-        game.context.fillText("得分：" + this.score, 10, 290);
-        game.drawImage(this.paddle)
-        game.drawImage(this.ball)
-        for (let i = 0; i < this.blocks.length; i++) {
-            let block = this.blocks[i]
-            if (block.alive) {
-                game.drawImage(block)
-            }
-        }
+    
+        //移除被标记碰撞物体
+        this.remove()
+
+        this.updateEnemy()
     }
 }
-
-
-
-
-// var Scene = function (game) {
-//     var s = {
-//         game: game,
-//     }
-//     var paddle = Paddle(game)
-//     var ball = Ball(game)
-
-
-//     var levelN = 2
-//     var blocks = loadlevel(game, levelN)
-
-//     var score = 0
-
-//     game.registerAction("a", function () {
-//         paddle.moveLeft()
-//     })
-//     game.registerAction("d", function () {
-//         paddle.moveRight(game.canvas.width)
-//     })
-//     game.registerAction("f", function () {
-//         ball.fire()
-//     })
-
-//     var enableDragBall = false
-//     game.canvas.addEventListener("mousedown", function (e) {
-//         let point = {
-//             x: e.layerX,
-//             y: e.layerY,
-//         }
-//         enableDragBall = ball.judgeRect(ball, point)
-//     })
-//     game.canvas.addEventListener("mousemove", function (e) {
-//         let point = {
-//             x: e.layerX,
-//             y: e.layerY,
-//         }
-//         if (enableDragBall) {
-//             ball.x = point.x
-//             ball.y = point.y
-//         }
-//     })
-//     game.canvas.addEventListener("mouseup", function (e) {
-//         enableDragBall = false
-//     })
-
-//     var debugMode = function () {
-//         window.addEventListener("keydown", function (e) {
-//             if (e.key == "p") {
-//                 game.paused = !game.paused
-//             }
-//             if (e.key == "b") {
-//                 if (levelN > 1) {
-//                     levelN--
-//                 }
-//                 blocks = loadlevel(game, levelN)
-//             }
-//             if (e.key == "n") {
-//                 if (levelN == levels.length) {
-//                     return
-//                 }
-//                 levelN++
-//                 blocks = loadlevel(game, levelN)
-//             }
-//         })
-//         document.querySelector('#id_fps').addEventListener("input", function (e) {
-//             window.fps = e.target.value
-//         })
-//     }
-//     debugMode()
-
-//     s.update = function () {
-//         if (game.paused) { return }
-//         ball.move(game.canvas)
-//         if (ball.y > paddle.y) {
-//             var end  = new SceneEnd(game)
-//             game.replceScene(end)
-//         }
-//         if (paddle.collide(ball)) {
-//             ball.bounce(paddle)
-//         }
-//         for (let i = 0; i < blocks.length; i++) {
-//             let block = blocks[i]
-//             if (block.collide(ball)) {
-//                 block.kill()
-//                 ball.bounce(block)
-//                 score += 100
-//             }
-//         }
-//     }
-
-//     s.draw = function () {
-//         // draw
-//         game.context.fillStyle = "#646464"
-//         game.context.fillRect(0, 0, 400, 300)
-//         game.context.fillStyle = "#fff"
-//         game.context.fillText("得分：" + score, 10, 290);
-//         game.drawImage(paddle)
-//         game.drawImage(ball)
-//         for (let i = 0; i < blocks.length; i++) {
-//             let block = blocks[i]
-//             if (block.alive) {
-//                 game.drawImage(block)
-//             }
-//         }
-//     }
-
-//     return s
-// }
-
 

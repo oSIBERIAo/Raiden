@@ -1,5 +1,6 @@
 var Ball = function (game) {
-    var o = game.imageFromGame("ball")
+    // var o = game.textureByName("ball")
+    var o = GameImage.new(game, "ball")
 
     o.x = 190
     o.y = 203
