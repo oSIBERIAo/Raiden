@@ -7,6 +7,7 @@ var config = {
     bullet_speed: 1,
     enemybullet_speed: 12,
     enemy_number: 12,
+    frames_cooldown: 10,
 }
 
 class GameImage {
@@ -36,7 +37,6 @@ class Player extends GameImage{
         let name = `player${randomBetween(0, 4)}`
         super(game, name)
         this.setup()
-        this.setupInputs()
     }
     static new(game, name) {
         var i = new this(game, name)
@@ -57,20 +57,6 @@ class Player extends GameImage{
     debug() {
         this.speed = config.player_speed 
     }
-    setupInputs() {
-        this.game.registerAction("a", () => {
-            this.moveLeft()
-        })
-        this.game.registerAction("d", () => {
-            this.moveRight(this.game.canvas.width)
-        })
-        this.game.registerAction("w", () => {
-            this.moveUp(this.game.canvas.height)
-        })
-        this.game.registerAction("s", () => {
-            this.moveDown(this.game.canvas.height)
-        })
-    }
     fire() {
         if (this.cooldown == 0) {
             this.cooldown = config.player_cooldown
@@ -87,20 +73,20 @@ class Player extends GameImage{
     }
     moveRight(canvasWidth) {
         var o = this
-        if (o.x > canvasWidth - o.texture.width + o.w / 2) { return }
+        if (o.x > canvasWidth - o.w + o.w / 2) { return }
         o.x += o.speed
     }
     moveUp(canvasHeight) {
         var o = this
-        if (o.y > canvasHeight - o.texture.height + o.h/2 ) { 
-            return o.y = canvasHeight - o.texture.height + o.h / 2
+        if (o.y > canvasHeight - o.h + o.h/2 ) { 
+            return o.y = canvasHeight - o.h + o.h / 2
         }
         if (o.y < - o.h / 2) { return }
         o.y -= o.speed
     }
     moveDown(canvasHeight) {
         var o = this
-        if (o.y > canvasHeight - o.texture.height + o.h/2 ) { return }
+        if (o.y > canvasHeight - o.h + o.h/2 ) { return }
         o.y += o.speed
     }
 }

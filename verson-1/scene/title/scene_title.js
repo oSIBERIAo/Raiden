@@ -10,12 +10,25 @@ class SceneTitle extends GameScene {
             var start = new Scene(this.game)
             this.game.replceScene(start)
         }
-        var gameLable = GameLable.new(this.game, "开始，按K开始游戏")
-        this.addElement(gameLable)
 
+        this.gameLable = GameLable.new(this.game, "开始，按K开始游戏")
+        this.addElement(this.gameLable)
+
+        this.gameAnimation = GameAnimation.new(this.game)
+        this.addElement(this.gameAnimation)
+ 
+        this.setupInputs()
     }
     draw() {
         super.draw()
+    }
+    setupInputs() {
+        this.game.registerAction("a", (keyStatus) => {
+            this.gameAnimation.moveLeft(keyStatus)
+        })
+        this.game.registerAction("d", (keyStatus) => {
+            this.gameAnimation.moveRight(keyStatus)
+        })
     }
 }
 class GameLable {

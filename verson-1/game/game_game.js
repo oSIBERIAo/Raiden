@@ -12,10 +12,10 @@ class Game extends GameScene {
         var g = this
 
         window.addEventListener("keydown", function (e) {
-            g.keydowns[e.key] = true
+            g.keydowns[e.key] =  'down'
         })
         window.addEventListener("keyup", function (e) {
-            g.keydowns[e.key] = false
+            g.keydowns[e.key] = 'up'
         })
         this.init()
     }
@@ -38,8 +38,13 @@ class Game extends GameScene {
         var actions = Object.keys(g.actions)
         for (let i = 0; i < actions.length; i++) {
             let key = actions[i]
-            if (g.keydowns[key]) {
-                g.actions[key]()
+            let status = g.keydowns[key]
+            if (status == 'down') {
+                g.actions[key]('down')
+            } else if (status == 'up') {
+                // g.actions[key](status) 错误
+                g.actions[key]('up')
+                g.keydowns[key] = null
             }
         }
         g.update()

@@ -1,11 +1,13 @@
 class Scene extends GameScene {
     constructor(game) {
         super(game)
+        this.game = game
         this.enableDebugMode = true
         this.score = 0
 
         
         this.setup()
+        this.setupInputs()
 
         var debugMode = () => {
             window.addEventListener("keydown", (e) => {
@@ -59,10 +61,21 @@ class Scene extends GameScene {
         this.addEnemeies()
         this.game.registerAction("f", () => {
             this.player.fire()
+        })  
+    }
+    setupInputs() {
+        this.game.registerAction("a", () => {
+            this.player.moveLeft()
         })
-
-        
-       
+        this.game.registerAction("d", () => {
+            this.player.moveRight(this.game.canvas.width)
+        })
+        this.game.registerAction("w", () => {
+            this.player.moveUp(this.game.canvas.height)
+        })
+        this.game.registerAction("s", () => {
+            this.player.moveDown(this.game.canvas.height)
+        })
     }
     addEnemeies() {
         // var es = []
