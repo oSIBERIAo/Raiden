@@ -10,7 +10,7 @@ const rectIntersects = function (a, b) {
                 return true
             }
         }
-    } catch(err) {
+    } catch (err) {
         log('捕捉到错误', err)
         return false
     }
@@ -22,3 +22,5 @@ const randomBetween = function (start, end) {
     s = start + Math.floor(s)
     return s
 }
+
+export {aInb, rectIntersects, randomBetween}

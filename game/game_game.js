@@ -1,7 +1,8 @@
+import {GameScene} from './game_scene.js'
+
 class Game extends GameScene {
-    constructor(images, Callback) {
-        super(images, Callback)
-        this.Callback = Callback
+    constructor(images) {
+        super(images)
         this.scene = null
         this.actions = {}
         this.keydowns = {}
@@ -11,13 +12,13 @@ class Game extends GameScene {
         this.context = this.canvas.getContext('2d')
         var g = this
 
-        window.addEventListener("keydown", function (e) {
-            g.keydowns[e.key] =  'down'
+        window.addEventListener('keydown', function (e) {
+            g.keydowns[e.key] = 'down'
         })
-        window.addEventListener("keyup", function (e) {
+        window.addEventListener('keyup', function (e) {
             g.keydowns[e.key] = 'up'
         })
-        this.init()
+        // this.init()
     }
     textureByName(name) {
         var g = this
@@ -73,25 +74,31 @@ class Game extends GameScene {
     }
     __start() {
         var g = this
-        this.Callback(g)
+        // this.Callback(g)
         setTimeout(function () {
             g.runloop()
         }, 1000 / window.fps)
     }
+    run() {
+        this.__start()
+    }
     init() {
-        var g = this
-        var names = Object.keys(this.images)
-        for (let i = 0; i < names.length; i++) {
-            let name = names[i]
-            let path = g.images[name]
-            let img = new Image()
-            img.src = path
-            img.onload = function () {
-                g.images[name] = img
-                if (i == names.length - 1) {
-                    g.__start()
-                }
-            }
-        }
+        // var g = this
+        // var names = Object.keys(this.images)
+        // for (let i = 0; i < names.length; i++) {
+        //     let name = names[i]
+        //     let path = g.images[name]
+        //     let img = new Image()
+        //     img.src = path
+        //     img.onload = function () {
+        //         g.images[name] = img
+        //         if (i == names.length - 1) {
+        //             console.log('g.images', g.images)
+        //             // g.__start()
+        //         }
+        //     }
+        // }
     }
 }
+
+export {Game}
