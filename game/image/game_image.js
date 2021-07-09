@@ -1,14 +1,5 @@
-var config = {
-    player_speed: 2,
-    player_cooldown: 60,
-    // enemy_speed: 30, //
-    enemy_cooldown: 240,
-    backGround_bgspeed: 1,
-    bullet_speed: 1,
-    enemybullet_speed: 12,
-    enemy_number: 12,
-    frames_cooldown: 10,
-}
+import {randomBetween} from '../utils.js'
+import {config} from '../config.js'
 
 class GameImage {
     constructor(game, name) {
@@ -25,14 +16,13 @@ class GameImage {
         var i = new this(game, name)
         return i
     }
-    update() {
-    }
+    update() {}
     draw() {
         this.game.drawImage(this)
     }
 }
 
-class Player extends GameImage{
+class Player extends GameImage {
     constructor(game) {
         let name = `player${randomBetween(0, 4)}`
         super(game, name)
@@ -50,12 +40,12 @@ class Player extends GameImage{
         this.cooldown = config.player_cooldown
     }
     update() {
-        if (this.cooldown > 0) { 
-            this.cooldown --
+        if (this.cooldown > 0) {
+            this.cooldown--
         }
     }
     debug() {
-        this.speed = config.player_speed 
+        this.speed = config.player_speed
     }
     fire() {
         if (this.cooldown == 0) {
@@ -63,30 +53,38 @@ class Player extends GameImage{
             let bullet = Bullet.new(this.game)
             bullet.x = this.x + this.w / 2 - bullet.w / 2
             bullet.y = this.y - 35
-            this.game.scene.addElement(bullet) 
+            this.game.scene.addElement(bullet)
         }
     }
     moveLeft() {
         var o = this
-        if (o.x <= -o.w / 2) { return }
+        if (o.x <= -o.w / 2) {
+            return
+        }
         o.x -= o.speed
     }
     moveRight(canvasWidth) {
         var o = this
-        if (o.x > canvasWidth - o.w + o.w / 2) { return }
+        if (o.x > canvasWidth - o.w + o.w / 2) {
+            return
+        }
         o.x += o.speed
     }
     moveUp(canvasHeight) {
         var o = this
-        if (o.y > canvasHeight - o.h + o.h/2 ) { 
-            return o.y = canvasHeight - o.h + o.h / 2
+        if (o.y > canvasHeight - o.h + o.h / 2) {
+            return (o.y = canvasHeight - o.h + o.h / 2)
         }
-        if (o.y < - o.h / 2) { return }
+        if (o.y < -o.h / 2) {
+            return
+        }
         o.y -= o.speed
     }
     moveDown(canvasHeight) {
         var o = this
-        if (o.y > canvasHeight - o.h + o.h/2 ) { return }
+        if (o.y > canvasHeight - o.h + o.h / 2) {
+            return
+        }
         o.y += o.speed
     }
 }
@@ -120,7 +118,7 @@ class Enemy extends GameImage {
         if (this.cooldown > 0) {
             this.cooldown--
         }
-         //越界检测
+        //越界检测
         if (this.y > this.game.canvas.height) {
             this.status = false
             this.game.scene.numberEnemy--
@@ -144,12 +142,12 @@ class BackGround extends GameImage {
     update() {
         this.y += this.bgspeed
         if (this.y > this.game.canvas.clientHeight) {
-            return this.y = -this.game.canvas.clientHeight + this.bgspeed
+            return (this.y = -this.game.canvas.clientHeight + this.bgspeed)
         }
     }
     debug() {
         this.bgspeed = config.backGround_bgspeed
-    }  
+    }
 }
 
 class Bullet extends GameImage {
@@ -166,7 +164,7 @@ class Bullet extends GameImage {
         this.y -= this.speed
         if (this.y < 0 - this.h) {
             this.status = false
-        } 
+        }
     }
     debug() {
         this.speed = config.bullet_speed
@@ -175,12 +173,12 @@ class Bullet extends GameImage {
 
 class EnemyBullet extends GameImage {
     constructor(game, direction) {
-        let name  = 'bullet1'
+        let name = 'bullet1'
         super(game, name)
         this.setup()
     }
     setup() {
-        this.speed = config.enemybullet_speed/10
+        this.speed = config.enemybullet_speed / 10
     }
     update() {
         this.y += this.speed
@@ -189,3 +187,5 @@ class EnemyBullet extends GameImage {
         this.speed = config.enemybullet_speed / 10
     }
 }
+
+export {GameImage, Player, Enemy, BackGround, Bullet, EnemyBullet}

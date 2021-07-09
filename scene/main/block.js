@@ -1,7 +1,7 @@
 var Block = function (game, position) {
     // var o = game.imageFromGame("block")
 
-    var o = GameImage.new(game, "block")
+    var o = GameImage.new(game, 'block')
     var p = position
 
     o.x = p[0]
@@ -11,11 +11,10 @@ var Block = function (game, position) {
 
     o.kill = function () {
         if (o.lives < 1) {
-            o.alive = false 
+            o.alive = false
         } else {
             o.lives--
         }
-        
     }
     o.collide = function (ball) {
         //未存活加碰撞检测
@@ -23,3 +22,5 @@ var Block = function (game, position) {
     }
     return o //Obj
 }
+
+export {Block}

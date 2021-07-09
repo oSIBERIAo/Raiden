@@ -1,9 +1,17 @@
+import {config} from '../../game/config.js'
+import {randomBetween} from '../../game/utils.js'
+import {GameScene} from '../../game/game_scene.js'
+import {GameImage} from '../../game/image/game_image.js'
+import {GameAnimation} from '../../game/game_animation.js'
+
+import {Scene} from '../main/scene.js'
+
 class SceneTitle extends GameScene {
     constructor(game) {
         super(game)
         this.game = game
 
-        this.game.registerAction("k",  () => {
+        this.game.registerAction('k', () => {
             this.replceScene()
         })
         this.replceScene = function () {
@@ -11,22 +19,23 @@ class SceneTitle extends GameScene {
             this.game.replceScene(start)
         }
 
-        this.gameLable = GameLable.new(this.game, "开始，按K开始游戏")
+        this.gameLable = GameLable.new(this.game, '开始，按K开始游戏')
         this.addElement(this.gameLable)
 
+        // debugger
         this.gameAnimation = GameAnimation.new(this.game)
         this.addElement(this.gameAnimation)
- 
+
         this.setupInputs()
     }
     draw() {
         super.draw()
     }
     setupInputs() {
-        this.game.registerAction("a", (keyStatus) => {
+        this.game.registerAction('a', (keyStatus) => {
             this.gameAnimation.moveLeft(keyStatus)
         })
-        this.game.registerAction("d", (keyStatus) => {
+        this.game.registerAction('d', (keyStatus) => {
             this.gameAnimation.moveRight(keyStatus)
         })
     }
@@ -42,15 +51,15 @@ class GameLable {
         var i = new this(game, text)
         return i
     }
-    update() {    
+    update() {
         if (this.game.scene.score > 0) {
             this.text = this.game.scene.score
         }
     }
     draw() {
-        this.game.context.fillStyle = "#FF3300"
-        this.game.context.font = "20px Helvetica";
-        this.game.context.fillText(this.text, this.x, this.y);
+        this.game.context.fillStyle = '#FF3300'
+        this.game.context.font = '20px Helvetica'
+        this.game.context.fillText(this.text, this.x, this.y)
     }
 }
 class GameParticleSystem {
@@ -68,17 +77,15 @@ class GameParticleSystem {
         var i = new this(game, point)
         return i
     }
-    init() {
-
-    }
-    update() {  
+    init() {}
+    update() {
         if (this.particles.length < this.numberOfParticle) {
             let p = Particle.new(this.game, this)
             p.x = this.x
             p.y = this.y
             this.particles.push(p)
-        }  
-        this.live --
+        }
+        this.live--
         if (this.live < 0) {
             this.status = false
         }
@@ -89,9 +96,8 @@ class GameParticleSystem {
             return elements.status != false
         }
         this.particles = this.particles.filter(statusCheck)
-
     }
-    draw() {    
+    draw() {
         for (let i = 0; i < this.particles.length; i++) {
             let p = this.particles[i]
             p.draw()
@@ -113,9 +119,9 @@ class Particle extends GameImage {
         this.speedY = randomBetween(-100, 100)
     }
     update() {
-        this.lives --
-        this.x += this.speedX/100
-        this.y += this.speedY/100
+        this.lives--
+        this.x += this.speedX / 100
+        this.y += this.speedY / 100
         if (this.lives < 0) {
             this.status = false
         }
@@ -124,3 +130,5 @@ class Particle extends GameImage {
         this.speed = randomBetween(-100, 100)
     }
 }
+
+export {SceneTitle, GameLable, GameParticleSystem, Particle}

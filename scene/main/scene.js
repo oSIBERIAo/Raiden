@@ -1,3 +1,9 @@
+import {aInb, rectIntersects, randomBetween} from '../../game/utils.js'
+import {config} from '../../game/config.js'
+import {GameScene} from '../../game/game_scene.js'
+import {Player, BackGround, Bullet, Enemy, EnemyBullet} from '../../game/image/game_image.js'
+import {GameLable, GameParticleSystem} from '../title/scene_title.js'
+
 class Scene extends GameScene {
     constructor(game) {
         super(game)
@@ -5,30 +11,29 @@ class Scene extends GameScene {
         this.enableDebugMode = true
         this.score = 0
 
-        
         this.setup()
         this.setupInputs()
 
         var debugMode = () => {
-            window.addEventListener("keydown", (e) => {
-                if (e.key == "o") {
+            window.addEventListener('keydown', (e) => {
+                if (e.key == 'o') {
                     this.enableDebugMode = !this.enableDebugMode
                 }
                 if (!this.enableDebugMode) {
                     log('关闭试调模式')
                     return
                 } else {
-                    if (e.key == "p") {
+                    if (e.key == 'p') {
                         log('ppp')
                         this.game.paused = !this.game.paused
                     }
-                    if (e.key == "b") {
+                    if (e.key == 'b') {
                         if (this.levelN > 1) {
                             this.levelN--
                         }
                         this.blocks = loadlevel(game, this.levelN)
                     }
-                    if (e.key == "n") {
+                    if (e.key == 'n') {
                         if (this.levelN == levels.length) {
                             return
                         }
@@ -36,11 +41,12 @@ class Scene extends GameScene {
                         this.blocks = loadlevel(game, this.levelN)
                     }
                 }
-
             })
-            document.querySelector('#id_fps').addEventListener("input", function (e) {
-                window.fps = e.target.value
-            })
+            document
+                .querySelector('#id_fps')
+                .addEventListener('input', function (e) {
+                    window.fps = e.target.value
+                })
         }
         debugMode()
     }
@@ -59,21 +65,21 @@ class Scene extends GameScene {
 
         this.numberEnemy = 12
         this.addEnemeies()
-        this.game.registerAction("f", () => {
+        this.game.registerAction('f', () => {
             this.player.fire()
-        })  
+        })
     }
     setupInputs() {
-        this.game.registerAction("a", () => {
+        this.game.registerAction('a', () => {
             this.player.moveLeft()
         })
-        this.game.registerAction("d", () => {
+        this.game.registerAction('d', () => {
             this.player.moveRight(this.game.canvas.width)
         })
-        this.game.registerAction("w", () => {
+        this.game.registerAction('w', () => {
             this.player.moveUp(this.game.canvas.height)
         })
-        this.game.registerAction("s", () => {
+        this.game.registerAction('s', () => {
             this.player.moveDown(this.game.canvas.height)
         })
     }
@@ -86,7 +92,7 @@ class Scene extends GameScene {
         }
         // this.enemies = es
     }
-     //碰撞检测标记
+    //碰撞检测标记
     removeCheck(a, b) {
         for (let i = 0; i < this.elements.length; i++) {
             if (this.elements[i] instanceof a) {
@@ -94,17 +100,21 @@ class Scene extends GameScene {
                     if (this.elements[x] instanceof b) {
                         let a = this.elements[i]
                         let b = this.elements[x]
-                        let result = rectIntersects(a, b) || rectIntersects(b, a)
+                        let result =
+                            rectIntersects(a, b) || rectIntersects(b, a)
                         if (result) {
-                             //标记去除并添加爆炸效果
+                            //标记去除并添加爆炸效果
                             a.status = false
                             b.status = false
-                            if (a instanceof Enemy || b instanceof Enemy ) {
+                            if (a instanceof Enemy || b instanceof Enemy) {
                                 this.score += 100
-                                var ParticleSystem = GameParticleSystem.new(this.game, b)
+                                var ParticleSystem = GameParticleSystem.new(
+                                    this.game,
+                                    b
+                                )
                                 this.addElement(ParticleSystem)
                             }
-                            
+
                             this.numberEnemy--
                         }
                     }
@@ -135,7 +145,9 @@ class Scene extends GameScene {
     update() {
         super.update()
         var game = this.game
-        if (game.paused) { return }
+        if (game.paused) {
+            return
+        }
 
         //碰撞检测标记
         this.removeCheck(Enemy, Bullet)
@@ -143,7 +155,6 @@ class Scene extends GameScene {
         this.removeCheck(EnemyBullet, Player)
         this.removeCheck(EnemyBullet, Bullet)
 
-    
         //移除被标记碰撞物体
         this.remove()
 
@@ -151,3 +162,4 @@ class Scene extends GameScene {
     }
 }
 
+export {Scene}
