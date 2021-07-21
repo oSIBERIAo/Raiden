@@ -1,103 +1,79 @@
 import {GameScene} from './game_scene.js'
 
 class Game extends GameScene {
-    constructor(images) {
+     constructor(images) {
         super(images)
         this.scene = null
         this.actions = {}
         this.keydowns = {}
         this.images = images
         this.paused = false
+
         this.canvas = document.querySelector('#id-canvas')
         this.context = this.canvas.getContext('2d')
-        var g = this
 
-        window.addEventListener('keydown', function (e) {
-            g.keydowns[e.key] = 'down'
+        window.addEventListener('keydown',  (e) => {
+            this.keydowns[e.key] = 'down'
         })
-        window.addEventListener('keyup', function (e) {
-            g.keydowns[e.key] = 'up'
+        window.addEventListener('keyup',  (e) => {
+            this.keydowns[e.key] = 'up'
         })
-        // this.init()
     }
     textureByName(name) {
-        var g = this
-        var img = g.images[name]
-        return img
+        return this.images[name]
     }
     drawImage(guaImage) {
-        var g = this
-        g.context.drawImage(guaImage.texture, guaImage.x, guaImage.y)
+        this.context.drawImage(guaImage.texture, guaImage.x, guaImage.y)
     }
     registerAction(key, callback) {
-        var g = this
-        g.actions[key] = callback
+        this.actions[key] = callback
     }
 
-    runloop() {
-        var g = this
-        var actions = Object.keys(g.actions)
+    runloop = ()=> {
+        let actions = Object.keys(this.actions)
         for (let i = 0; i < actions.length; i++) {
             let key = actions[i]
-            let status = g.keydowns[key]
+            let status = this.keydowns[key]
             if (status == 'down') {
-                g.actions[key]('down')
+                this.actions[key]('down')
             } else if (status == 'up') {
-                // g.actions[key](status) 错误
-                g.actions[key]('up')
-                g.keydowns[key] = null
+                // this.actions[key](status) 错误
+                this.actions[key]('up')
+                this.keydowns[key] = null
             }
         }
-        g.update()
-        g.context.clearRect(0, 0, g.canvas.width, g.canvas.height)
-        g.draw()
-        setTimeout(function () {
-            g.runloop()
-        }, 1000 / window.fps)
+        this.update()
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.draw()
+        // setTimeout(() => {
+        //     this.runloop()
+        // }, 1000 / window.fps)
+
+        setTimeout(() => {
+            window.requestAnimationFrame(this.runloop)
+        }, 1);
     }
     replceScene(scene) {
-        var g = this
-        g.scene = scene
+        this.scene = scene
     }
     update() {
-        var g = this
-        g.scene.update()
+        this.scene.update()
     }
     draw() {
-        var g = this
-        g.scene.draw()
+        this.scene.draw()
     }
 
     runWithScene(scene) {
-        var g = this
-        g.scene = scene
+        this.scene = scene
     }
     __start() {
-        var g = this
-        // this.Callback(g)
-        setTimeout(function () {
-            g.runloop()
-        }, 1000 / window.fps)
+        // setTimeout(() =>{
+        //     this.runloop()
+        // }, 1000 / window.fps)
+        window.requestAnimationFrame(this.runloop)
     }
     run() {
         this.__start()
-    }
-    init() {
-        // var g = this
-        // var names = Object.keys(this.images)
-        // for (let i = 0; i < names.length; i++) {
-        //     let name = names[i]
-        //     let path = g.images[name]
-        //     let img = new Image()
-        //     img.src = path
-        //     img.onload = function () {
-        //         g.images[name] = img
-        //         if (i == names.length - 1) {
-        //             console.log('g.images', g.images)
-        //             // g.__start()
-        //         }
-        //     }
-        // }
     }
 }
 

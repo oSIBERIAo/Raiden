@@ -14,7 +14,6 @@
             }
         </style>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
     </head>
     <body>
         <canvas id="id-canvas" width="400" height="600"></canvas>
@@ -26,6 +25,7 @@
                         class="game-auto-slider"
                         id="id_fps"
                         type="range"
+                        data-value="config.fps"
                         name="points"
                         value="60"
                         min="1"
@@ -98,7 +98,7 @@
                         type="range"
                         data-value="config.enemy_cooldown"
                         value="240"
-                        min="120"
+                        min="0"
                         max="480"
                     />
                     敌机子弹冷却速度：<span class="game-span"></span>
@@ -124,6 +124,20 @@
                         class="game-auto-slider"
                         id="player_speed"
                         type="range"
+                        data-value="config.enemy_speed"
+                        value="1"
+                        min="1"
+                        max="30"
+                    />
+                    敌机速度：<span class="game-span"></span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input
+                        class="game-auto-slider"
+                        id="player_speed"
+                        type="range"
                         data-value="config.enemy_number"
                         value="12"
                         min="1"
@@ -132,39 +146,24 @@
                     敌机数量：<span class="game-span"></span>
                 </label>
             </div>
+            <div>
+                <label>
+                    <input
+                        class="game-auto-slider"
+                        id="player_speed"
+                        type="range"
+                        data-value="config.frames_cooldown"
+                        value="10"
+                        min="1"
+                        max="100"
+                    />
+                    frames_cooldown：<span class="game-span"></span>
+                </label>
+            </div>
         </section>
 
         <script>
-            // var config = {
-            //     player_speed: 2,
-            //     player_cooldown: 60,
-            //     enemy_speed: 30, //
-            //     enemy_cooldown: 240,
-            //     backGround_bgspeed: 1,
-            //     bullet_speed: 1,
-            //     enemybullet_speed: 0.3,
-            //     enemy_number: 12,
-            // }
-            var es = (sel) => document.querySelectorAll(sel)
-            var bindAll = function (sel, eventName, callback) {
-                var selAll = es(sel)
-                for (let i = 0; i < selAll.length; i++) {
-                    let input = selAll[i]
-                    input.addEventListener(eventName, function (event) {
-                        callback(event)
-                    })
-                }
-            }
-            bindAll('.game-auto-slider', 'input', function (event) {
-                let target = event.target
-                let v = target.value
-                let bindValue = target.dataset.value
-                // config[bindValue] = Number(v) //player_speed
-                eval(bindValue + '=' + v)
 
-                let span = target.closest('label').querySelector('.game-span')
-                span.innerText = String(v)
-            })
         </script>
         <script type="module" src="./main.js"></script>
     </body>

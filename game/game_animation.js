@@ -1,4 +1,4 @@
-import {GameImage} from './image/game_image.js'
+import {GameImage} from './game_image.js'
 import {config} from './config.js'
 
 class GameAnimation {
@@ -8,8 +8,7 @@ class GameAnimation {
         this.setup()
     }
     static new(game) {
-        var i = new this(game)
-        return i
+        return new this(game)
     }
     setup() {
         this.x = 150
@@ -35,8 +34,10 @@ class GameAnimation {
     init(numberOfFrames) {
         var loadFrames = (key) => {
             for (let i = 0; i < numberOfFrames[key]; i++) {
+                // idle0
                 let name = key + `${i}`
-                let t = GameImage.new(this.game, name)
+                let t
+                t = GameImage.new(this.game, name)
                 t.x = this.x
                 this.animations[key].push(t)
             }
@@ -60,33 +61,32 @@ class GameAnimation {
             context.drawImage(o.texture, 0, 0)
             context.restore()
         } else {
-            // console.log('this.framesCurrent', this.framesCurrent)
             this.game.drawImage(this.framesCurrent)
         }
     }
     update() {
         this.framesCooldown--
+        // 动画精灵图张数
+        let imgs = this.numberOfFrames[this.animationName]
         if (this.framesCooldown < 0) {
-            this.framesCooldown = 10
-
-            this.frameIndex =
-                (this.frameIndex + 1) % this.numberOfFrames[this.animationName]
+            this.framesCooldown = config.frames_cooldown
+            this.frameIndex = (this.frameIndex + 1) % imgs
             this.framesCurrent = this.frames()[this.frameIndex]
             this.framesCurrent.x = this.x
             this.framesCurrent.y = this.y
         }
     }
     changeAnimation(status) {
-        var animationNames = {
+        let animationNames = {
             down: 'run',
             up: 'idle',
         }
-        var name = animationNames[status]
+        let name = animationNames[status]
         this.animationName = name
     }
     moveLeft(status) {
         this.changeAnimation(status)
-        var o = this.framesCurrent
+        let o = this.framesCurrent
         if (o.x <= -o.w / 2) {
             return
         }
@@ -95,8 +95,8 @@ class GameAnimation {
     }
     moveRight(status) {
         this.changeAnimation(status)
-        var o = this.framesCurrent
-        var canvasWidth = this.game.canvas.width
+        let o = this.framesCurrent
+        let canvasWidth = this.game.canvas.width
         if (o.x > canvasWidth - o.w + o.w / 2) {
             return
         }

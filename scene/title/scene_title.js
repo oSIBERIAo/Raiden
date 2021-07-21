@@ -1,7 +1,7 @@
 import {config} from '../../game/config.js'
 import {randomBetween} from '../../game/utils.js'
 import {GameScene} from '../../game/game_scene.js'
-import {GameImage} from '../../game/image/game_image.js'
+import {GameImage} from '../../game/game_image.js'
 import {GameAnimation} from '../../game/game_animation.js'
 
 import {Scene} from '../main/scene.js'

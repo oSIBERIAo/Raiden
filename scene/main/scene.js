@@ -1,7 +1,7 @@
 import {aInb, rectIntersects, randomBetween} from '../../game/utils.js'
 import {config} from '../../game/config.js'
 import {GameScene} from '../../game/game_scene.js'
-import {Player, BackGround, Bullet, Enemy, EnemyBullet} from '../../game/image/game_image.js'
+import {Player, BackGround, Bullet, Enemy, EnemyBullet} from '../../game/game_image.js'
 import {GameLable, GameParticleSystem} from '../title/scene_title.js'
 
 class Scene extends GameScene {
@@ -124,7 +124,7 @@ class Scene extends GameScene {
     }
     remove() {
         let statusCheck = function (elements) {
-            return elements.status != false
+            return elements.status != false && elements.y < 2000
         }
         this.elements = this.elements.filter(statusCheck)
     }

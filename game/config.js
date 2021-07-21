@@ -1,13 +1,14 @@
-var config = {
-    player_speed: 2,
-    player_cooldown: 60,
-    // enemy_speed: 30, //
-    enemy_cooldown: 240,
-    backGround_bgspeed: 1,
-    bullet_speed: 1,
-    enemybullet_speed: 12,
-    enemy_number: 12,
-    frames_cooldown: 10,
+let config = {
+    fps: 60,
+    player_speed: 6,
+    player_cooldown: 10,
+    enemy_speed: 4, //
+    enemy_cooldown: 200,
+    backGround_bgspeed: 4,
+    bullet_speed: 14,
+    enemybullet_speed: 14,
+    enemy_number: 14,
+    frames_cooldown: 1,
 }
 
 export {config}

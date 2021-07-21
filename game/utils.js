@@ -23,4 +23,32 @@ const randomBetween = function (start, end) {
     return s
 }
 
-export {aInb, rectIntersects, randomBetween}
+const loadAllImages = async (images) => {
+    return new Promise((resolve, reject) => {
+        var names = Object.keys(images)
+        let result = {}
+        for (let i = 0; i < names.length; i++) {
+            let name = names[i]
+            let path = images[name]
+            let img = new Image()
+            img.src = path
+            img.onload =  () => {
+                result[name] = img
+                if (i == names.length - 1 && Object.keys(result).length == names.length) {
+                    // console.log(`成功加载图片资源 ${Object.keys(result).length} 张`)
+                    return resolve(result)
+                } else if (i == names.length - 1 && Object.keys(result).length != names.length) {
+                    console.log('接住浏览器图片加载过快导致漏加载', loadAllImages)
+                    // 接住浏览器图片加载过快导致漏加载
+                    window.location.reload()
+                }
+            }
+            img.onerror = function () {
+                console.log('Error occurred while loading image, reloading')
+                window.location.reload()
+            }
+        }
+    })
+}
+
+export {aInb, rectIntersects, randomBetween, loadAllImages}
