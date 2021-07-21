@@ -32,20 +32,29 @@ const loadAllImages = async (images) => {
             let path = images[name]
             let img = new Image()
             img.src = path
-            img.onload =  () => {
+            img.onload = () => {
                 result[name] = img
-                if (i == names.length - 1 && Object.keys(result).length == names.length) {
+                if (
+                    i == names.length - 1 &&
+                    Object.keys(result).length == names.length
+                ) {
                     // console.log(`成功加载图片资源 ${Object.keys(result).length} 张`)
                     return resolve(result)
-                } else if (i == names.length - 1 && Object.keys(result).length != names.length) {
-                    console.log('接住浏览器图片加载过快导致漏加载', loadAllImages)
+                } else if (
+                    i == names.length - 1 &&
+                    Object.keys(result).length != names.length
+                ) {
+                    console.log(
+                        '接住浏览器图片加载过快导致漏加载',
+                        loadAllImages
+                    )
                     // 接住浏览器图片加载过快导致漏加载
-                    window.location.reload()
+                    // window.location.reload()
                 }
             }
             img.onerror = function () {
                 console.log('Error occurred while loading image, reloading')
-                window.location.reload()
+                // window.location.reload()
             }
         }
     })
