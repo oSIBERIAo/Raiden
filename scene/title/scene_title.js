@@ -19,7 +19,7 @@ class SceneTitle extends GameScene {
             this.game.replceScene(start)
         }
 
-        this.gameLable = GameLable.new(this.game, '开始，按K开始游戏')
+        this.gameLable = GameLabel.new(this.game, '开始，按K开始游戏')
         this.addElement(this.gameLable)
 
         // debugger
@@ -40,7 +40,7 @@ class SceneTitle extends GameScene {
         })
     }
 }
-class GameLable {
+class GameLabel {
     constructor(game, text) {
         this.game = game
         this.text = text
@@ -131,4 +131,4 @@ class Particle extends GameImage {
     }
 }
 
-export {SceneTitle, GameLable, GameParticleSystem, Particle}
+export {SceneTitle, GameLabel, GameParticleSystem, Particle}

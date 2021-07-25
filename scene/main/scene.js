@@ -2,7 +2,7 @@ import {aInb, rectIntersects, randomBetween} from '../../game/utils.js'
 import {config} from '../../game/config.js'
 import {GameScene} from '../../game/game_scene.js'
 import {Player, BackGround, Bullet, Enemy, EnemyBullet} from '../../game/game_image.js'
-import {GameLable, GameParticleSystem} from '../title/scene_title.js'
+import {GameLabel, GameParticleSystem} from '../title/scene_title.js'
 
 class Scene extends GameScene {
     constructor(game) {
@@ -42,11 +42,11 @@ class Scene extends GameScene {
                     }
                 }
             })
-            document
-                .querySelector('#id_fps')
-                .addEventListener('input', function (e) {
-                    window.fps = e.target.value
-                })
+            // document
+            //     .querySelector('#id_fps')
+            //     .addEventListener('input', function (e) {
+            //         window.fps = e.target.value
+            //     })
         }
         debugMode()
     }
@@ -59,9 +59,9 @@ class Scene extends GameScene {
         this.bg2.y = -this.game.canvas.clientHeight
 
         this.score = 0
-        this.lable = GameLable.new(game, this.score)
+        this.label = GameLabel.new(game, this.score)
 
-        this.addElement(this.bg, this.bg2, this.player, this.lable)
+        this.addElement(this.bg, this.bg2, this.player, this.label)
 
         this.numberEnemy = 12
         this.addEnemeies()

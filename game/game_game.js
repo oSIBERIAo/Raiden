@@ -45,13 +45,11 @@ class Game extends GameScene {
         this.update()
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.draw()
+
         // setTimeout(() => {
         //     this.runloop()
         // }, 1000 / window.fps)
-
-        setTimeout(() => {
-            window.requestAnimationFrame(this.runloop)
-        }, 1);
+        requestAnimationFrame(this.runloop)
     }
     replceScene(scene) {
         this.scene = scene
@@ -70,7 +68,7 @@ class Game extends GameScene {
         // setTimeout(() =>{
         //     this.runloop()
         // }, 1000 / window.fps)
-        window.requestAnimationFrame(this.runloop)
+        requestAnimationFrame(this.runloop)
     }
     run() {
         this.__start()
