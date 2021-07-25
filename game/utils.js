@@ -49,7 +49,7 @@ const loadAllImages = async (images) => {
                         loadAllImages
                     )
                     // 接住浏览器图片加载过快导致漏加载
-                    // window.location.reload()
+                    window.location.reload()
                 }
             }
             img.onerror = function () {

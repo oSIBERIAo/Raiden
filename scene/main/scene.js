@@ -2,7 +2,8 @@ import {aInb, rectIntersects, randomBetween} from '../../game/utils.js'
 import {config} from '../../game/config.js'
 import {GameScene} from '../../game/game_scene.js'
 import {Player, BackGround, Bullet, Enemy, EnemyBullet} from '../../game/game_image.js'
-import {GameLabel, GameParticleSystem} from '../title/scene_title.js'
+import {GameLabel} from '../title/scene_title.js'
+import {GameParticleSystem} from '../../game/game_particle_system.js'
 
 class Scene extends GameScene {
     constructor(game) {
@@ -50,6 +51,7 @@ class Scene extends GameScene {
         }
         debugMode()
     }
+
     setup() {
         var game = this.game
         this.player = Player.new(game)
@@ -69,6 +71,7 @@ class Scene extends GameScene {
             this.player.fire()
         })
     }
+
     setupInputs() {
         this.game.registerAction('a', () => {
             this.player.moveLeft()
@@ -83,6 +86,7 @@ class Scene extends GameScene {
             this.player.moveDown(this.game.canvas.height)
         })
     }
+
     addEnemeies() {
         // var es = []
         for (let i = 0; i < this.numberEnemy; i++) {
@@ -92,6 +96,7 @@ class Scene extends GameScene {
         }
         // this.enemies = es
     }
+
     //碰撞检测标记
     removeCheck(a, b) {
         for (let i = 0; i < this.elements.length; i++) {
@@ -110,7 +115,7 @@ class Scene extends GameScene {
                                 this.score += 100
                                 var ParticleSystem = GameParticleSystem.new(
                                     this.game,
-                                    b
+                                    b,
                                 )
                                 this.addElement(ParticleSystem)
                             }
@@ -122,12 +127,14 @@ class Scene extends GameScene {
             }
         }
     }
+
     remove() {
         let statusCheck = function (elements) {
             return elements.status != false && elements.y < 2000
         }
         this.elements = this.elements.filter(statusCheck)
     }
+
     updateEnemy() {
         this.numberEnemy = 0
         for (let i = 0; i < this.elements.length; i++) {
