@@ -21,28 +21,29 @@ class Scene extends GameScene {
                     this.enableDebugMode = !this.enableDebugMode
                 }
                 if (!this.enableDebugMode) {
-                    log('关闭试调模式')
+                    console.log('关闭试调模式')
                     return
                 } else {
                     if (e.key == 'p') {
-                        log('ppp')
                         this.game.paused = !this.game.paused
                     }
-                    if (e.key == 'b') {
-                        if (this.levelN > 1) {
-                            this.levelN--
-                        }
-                        this.blocks = loadlevel(game, this.levelN)
-                    }
-                    if (e.key == 'n') {
-                        if (this.levelN == levels.length) {
-                            return
-                        }
-                        this.levelN++
-                        this.blocks = loadlevel(game, this.levelN)
-                    }
+                    // 关卡跳跃
+                    // if (e.key == 'b') {
+                    //     if (this.levelN > 1) {
+                    //         this.levelN--
+                    //     }
+                    //     this.blocks = loadlevel(game, this.levelN)
+                    // }
+                    // if (e.key == 'n') {
+                    //     if (this.levelN == levels.length) {
+                    //         return
+                    //     }
+                    //     this.levelN++
+                    //     this.blocks = loadlevel(game, this.levelN)
+                    // }
                 }
             })
+            // 设置 fps
             // document
             //     .querySelector('#id_fps')
             //     .addEventListener('input', function (e) {
@@ -150,11 +151,11 @@ class Scene extends GameScene {
     }
 
     update() {
-        super.update()
-        var game = this.game
-        if (game.paused) {
+        if (this.game.paused) {
+            console.log('debugMode 暂停 ⏸️ ', this.game.paused)
             return
         }
+        super.update()
 
         //碰撞检测标记
         this.removeCheck(Enemy, Bullet)
